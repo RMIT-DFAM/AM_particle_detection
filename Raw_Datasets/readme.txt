@@ -1,1 +1,1 @@
-%this data is assed in the associated publication
+%this data is used in the associated publication
