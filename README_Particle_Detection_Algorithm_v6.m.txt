@@ -1,4 +1,7 @@
-This codebase, as found here (1) was developed for use for the following publication (2).
+This codebase, as found here (https://github.com/RMIT-DFAM/AM_particle_detection),
+was developed for use for the following publication (DOI: 10.1108/RPJ-07-2022-0225).
+
+Please cite both the publication and GitHub repository if using or modifying this work.
 
 //
 
