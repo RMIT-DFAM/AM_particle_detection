@@ -52,11 +52,9 @@ useDefault = input(prompt);
 
 if useDefault
 % Create Image Stack (PRE_02)
-%[imgStack,imgStackInfo]=readBinaryImgStack('H:\MATLAB\SDSet3','bmp'); %no image caps required
-%[imgStack,imgStackInfo]=readBinaryImgStack('\\rmit.internal\USRHome\sl2\s3431702\MATLAB\SDSet3_Full','bmp'); %no image caps required
-%[imgStack,imgStackInfo]=readBinaryImgStack('D:\MPM - Dry Ice Blasting - Micro CT Scans\Melbourne Scans\Post Blast\MPM_Beta_PostClean_07\output','bmp');
-%[imgStack,imgStackInfo]=readBinaryImgStack('E:\DR216\MPM - Dry Ice Blasting - Micro CT Scans\Melbourne Scans\Pre Blast\MPM_Beta_07_v2\output\395-495','bmp');
-[imgStack,imgStackInfo]=readBinaryImgStack('C:\Users\m_p_m\Documents\MATLAB\Dry_Ice_Blasting_uCT_MELB\1_Pre_Blast\MPM_Beta_07_v2\output\395-495','bmp');
+
+% [imgStack,imgStackInfo]=readBinaryImgStack('FILEPATH to dataset folder','image format');
+[imgStack,imgStackInfo]=readBinaryImgStack('C:\Users\USER\Documents\MATLAB\Particle_Detection_Algorithm','bmp');
 
 else
     % extact folder information and file type information for insertion
@@ -70,6 +68,8 @@ else
 end
     prompt = 'Select (Micro) CT Stack Reconstruction Log File'; %(PRE_03)
     if useDefault
+        
+%         textFileToExtractFrom = '../ReconstructionSoftware_Output.log'; %Must have MATLAB in Current Folder if using useDefault
         textFileToExtractFrom = '../NRecon_Output.log'; %Must have MATLAB in Current Folder if using useDefault
     else
         textFileToExtractFrom = uigetfile({'*.log','*.txt'});
@@ -96,8 +96,8 @@ mmPerPixelFinal = mmPerPixel;
 baseFileName = 1; %Needs to be in MATLAB Path
     prompt = 'Select a random image for Threshold comparisons';
     if useDefault
-        % baseFileName = '30deg_1mm_1_rec00000530.bmp'; % (PRE_04)
-        baseFileName = 'MPM_Beta_PostClean_07__rec00000577.bmp';
+        % baseFileName = '600_600_10_30deg_rec00000512.bmp'; % (PRE_04)
+        baseFileName = '600_600_10_30deg_rec00000512.bmp';
         % baseFileName = '';
     else
         baseFileName = uigetfile({'*.*'});
@@ -105,7 +105,7 @@ baseFileName = 1; %Needs to be in MATLAB Path
     
     [filepath,name,ext] = fileparts(baseFileName);
     
-    if strcmp(ext,".dcm")
+    if strcmp(ext,".dcm") % DICOM requires dicomeread
     baseFileData = dicomread(baseFileName);
     else
     baseFileData = imread(baseFileName);
@@ -127,6 +127,9 @@ else
     % The intent behind thresholding is to remove noise and deliver a
     % resultant binarized image that is as close as possible to the 
     % original image.
+    
+    % For the test datasets, a lower bound of 70, and upper bound of 255
+    % were selected
 
 %% Part 1.2.3.1 - Thresholding - Lower Bound
 
@@ -239,6 +242,8 @@ if useDefault
 
 %% Part 1.2.3.3 - Thresholding - Binarize Image Stack
 
+% %Update Image Stack based on thresholding values
+
 imgStack=imgStack>=densityThresholdLow & imgStack<=densityThresholdHigh;
 
 end
@@ -275,7 +280,9 @@ bounds=getBoundaryVals(polyBounds,CC,largestConnCompID);
 
 elseif prt1_prompt == 2
   
-    load('ZZ_PreAnalysisData_ZZ.mat')
+%      PreAnalysisData = uigetfile({'*.mat'});
+%      load(PreAnalysisData);
+       load('ZZ_PreAnalysisData_ZZ.mat')
     
 imgStack                      = cellToSaveOut{1,1};
 imgStackInfo                  = cellToSaveOut{1,2};
@@ -291,6 +298,11 @@ bounds                        = cellToSaveOut{1,10};
 [numRows_xAxis,numCols_yAxis, numSlices_zAxis] = size(imgStack);
 
 %flip x & y data, due to bwboundaries
+
+% //
+
+% Isosurface model rendering 
+% True option for GPU usage, false option for integrated graphics
 
 % ax = axes(figure);
 % iptsetpref('VolumeViewerUseHardware',true)
@@ -1071,6 +1083,9 @@ else
 % ylabel('Number of Clusters')
 
 % Micrometer
+% //
+
+% update scaling for histograms
 umPerPixel = mmPerPixelFinal * 1000;
 distribution_height_per_embCluster_v2 = distribution_height_per_embCluster .* umPerPixel;
 edges = [(umPerPixel/2):umPerPixel:(umPerPixel * 100)];
@@ -1166,6 +1181,7 @@ A.Position=[0 0 5 5];
 
 end
 
+% //
 %% Part 6.2 - Histogram Generation - NCB (PRE_05)
 
 if check_efgh == 1
@@ -1408,63 +1424,4 @@ for i=1:numSlices
             largestCompY=c(h==i);
             [in,on]=inpolygon(largestCompX,largestCompY,minorBound(:,1),minorBound(:,2));
             if sum(in)<1 || sum(on)<1
-                 bounds.NonConnectedBound(i)={[bounds.NonConnectedBound{i};NaN NaN NaN;[minorBound ones(size(minorBound,1),1)*i]]};
-            else
-                bounds.MinorBoundsExternal(i)={[bounds.MinorBoundsExternal{i};NaN NaN NaN;[minorBound ones(size(minorBound,1),1)*i]]};
-            end
-        end
-        %% Check if Major or Minor Bounds
-%         close all;
-%         testImage=polyBounds{i,2};
-%         imagesc(testImage);hold on;
-%         scatter(largestCompX,largestCompY);
-%         plot(minorBound(:,1),minorBound(:,2),'r');
-
-    end
-    end
-    %fprintf('
-end
-end
-
-
-function gscatter3b(x,y,z,group,clr,sym,siz,doleg,xnam,ynam,znam)
-%GSCATTER3B  3D Scatter plot with grouping variable
-%   gscatter3(x,y,z,group,clr,sym,siz,doleg,xnam,ynam,znam)   
-%   Designed to work in the exactly same fashion as statistics toolbox's
-%   gscatter. Differently from GSCATTER3, this function requires the
-%   statistics toolbox installed.
-%   
-%
-%   See also GSCATTER, GSCATTER3
-%
-%   Copyright 2017 Gustavo Ferraz Trinade.
-% Set number of groups 
-cgroups = unique(group);
-cmap = lines(size(cgroups,1));
-% Input variables
-if (nargin < 5),  clr = lines(max(size(cgroups))); end
-if (nargin < 6) || isempty(sym), sym = '.'; end
-if (nargin < 7),  siz = 20;           end
-if (nargin < 8),  doleg = 'off';        end
-if (nargin < 9),  xnam = inputname(1); end
-if (nargin < 10), ynam = inputname(2); end
-if (nargin < 11), znam = inputname(3); end
-% Get current axes
-a = gca;
-hold(a,'on')
-% call GSCATTER and capture output argument (handles to lines)
-h = gscatter(x, y, group,clr,sym,siz,doleg,xnam,ynam);
-for i = 1:max(size(cgroups))
-        if iscell(cgroups) || ischar(cgroups)
-            gi = find(strcmp(group,cgroups(i)));
-        else
-            gi = find(group == cgroups(i));
-        end
-    
-        set(h(i), 'ZData', z( gi ));
-end
-zlabel(a,znam);    
-view(3)
-    
-    
-end
+                 bounds.NonConnectedBound(i)={[boun
