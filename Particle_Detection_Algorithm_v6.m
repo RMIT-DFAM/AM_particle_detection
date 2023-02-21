@@ -53,6 +53,8 @@ useDefault = input(prompt);
 if useDefault
 % Create Image Stack (PRE_02)
 
+% if end-user is running with useDefault as true, below filepath to be updated accordingly
+
 % [imgStack,imgStackInfo]=readBinaryImgStack('FILEPATH to dataset folder','image format');
 [imgStack,imgStackInfo]=readBinaryImgStack('C:\Users\USER\Documents\MATLAB\Particle_Detection_Algorithm','bmp');
 
@@ -68,6 +70,8 @@ else
 end
     prompt = 'Select (Micro) CT Stack Reconstruction Log File'; %(PRE_03)
     if useDefault
+    
+    % if end-user is running with useDefault as true, below filename to be updated accordingly
         
 %         textFileToExtractFrom = '../ReconstructionSoftware_Output.log'; %Must have MATLAB in Current Folder if using useDefault
         textFileToExtractFrom = '../NRecon_Output.log'; %Must have MATLAB in Current Folder if using useDefault
@@ -96,7 +100,10 @@ mmPerPixelFinal = mmPerPixel;
 baseFileName = 1; %Needs to be in MATLAB Path
     prompt = 'Select a random image for Threshold comparisons';
     if useDefault
-        % baseFileName = '600_600_10_30deg_rec00000512.bmp'; % (PRE_04)
+    
+        % if end-user is running with useDefault as true, below filename to be updated accordingly
+
+        % baseFileName = 'randomImageFromReconstructedSliceData.bmp'; % (PRE_04)
         baseFileName = '600_600_10_30deg_rec00000512.bmp';
         % baseFileName = '';
     else
