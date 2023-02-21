@@ -51,10 +51,16 @@ format short
 
 %% Important Variables, could be set by user ahead of time for loop conditions
 
+% VARIABLE ONE for manual input
 radius = 300;
+% VARIABLE TWO for manual input
 cylinderHeight = 500;
 
+% VARIABLE THREE for manual input
 sphereOffset = 325; %IMPORTANT 
+
+% VARIABLE FOUR for manual input; 
+% change all instances of radii, including radii, initial, initialUp, initialDown and 'start of "FOR" loop'
 
 radii = 50; % initial set condition
 initialRadii = 50;
