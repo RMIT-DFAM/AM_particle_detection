@@ -17,13 +17,12 @@ If you just wish to generate the results as found in the afore mentioned publica
 "Current Folder" for MATLAB, should be the folder that contains the reconstructed slice files & the reconstruction log, and/or the matrix file(s) respectively.
 
 -> Option One is to run the codebase under Startup Option One, and inputting the "useDefault" variable as "true"
+---> If you wish to try this codebase with your own dataset, best to run through Startup Option One, with useDefault = false. After the intial run through
+     of this option, you can then use Startup Option Two, which will help speed up the process.
 ---> useDefault was a flag implemented for iteration and debugging purposes.
----> Selecting "true" will run through with pre-selected variables and file locations.
----> Selecting 'false' will allow the user to manually select key variables and options.
+-----> Selecting "true" will run through with pre-selected variables and file locations.
+-----> Selecting 'false' will allow the user to manually select key variables and options.
 -> Option Two is to run the codebase under Startup Option Two, and use the three different provided "ZZ_PreAnalysisData_ZZ.mat" matrix files as inputs.
-
-If you wish to try this codebase with your own dataset, best to run through Startup Option One, with useDefault = false. After the intial run through
-of this option, you can then use Startup Option Two, which will help speed up the process.
 
 Please note that the density-based spatial clustering used for the Particle Detection Algorithm has two independant variables (epsilon,minpts). These 
 have currently not been implemented in a way to allow for user selection in the MATLAB command window and are currently set to 3 and 5 respectively.
