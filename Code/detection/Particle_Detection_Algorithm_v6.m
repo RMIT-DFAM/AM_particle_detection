@@ -82,8 +82,8 @@ end
 % Extract the scaled image size per pixel from the reconstruction log file
 
 str1 = extractFileText(textFileToExtractFrom);
-start = "Image Pixel Size (um)=";
-fin = newline + "Scaled Image Pixel Size (um)=";
+start = 'Image Pixel Size (um)=';
+fin = newline + 'Scaled Image Pixel Size (um)=';
 mmPerPixel = extractBetween(str1,start,fin);
 mmPerPixel = strtrim(mmPerPixel);
 mmPerPixel = str2num(mmPerPixel);
@@ -112,7 +112,7 @@ baseFileName = 1; %Needs to be in MATLAB Path
     
     [filepath,name,ext] = fileparts(baseFileName);
     
-    if strcmp(ext,".dcm") % DICOM requires dicomeread
+    if strcmp(ext,'.dcm') % DICOM requires dicomeread
     baseFileData = dicomread(baseFileName);
     else
     baseFileData = imread(baseFileName);
@@ -180,10 +180,10 @@ else
 
     prompt = 'Is the thresholded image accurate to the input image? Yes or No? ';
     if useDefault
-        str1 = "Yes";
+        str1 = 'Yes';
     else
         str1 = input(prompt,'s');
-        while strcmp(str1,"No")
+        while strcmp(str1,'No')
             prompt = 'What is the value of the threshold sensitivity from 0 to 255? ';
             s1 = input(prompt);
             lb = s1;
@@ -228,7 +228,7 @@ if useDefault
     else
         prompt = 'Is the thresholded image accurate to the input image? Yes or No? ';
         str1= input(prompt,'s');
-        while strcmp(str1,"No")
+        while strcmp(str1,'No')
             prompt = 'What is the value of the threshold sensitivity from 0 to 255? ';
             s1 = input(prompt);
             % clear s2;
@@ -339,7 +339,7 @@ baseFileName = uigetfile({'*.*'});
     
 [filepath,name,ext] = fileparts(baseFileName);
     
-if strcmp(ext,".dcm")
+if strcmp(ext,'.dcm')
 baseFileData = dicomread(baseFileName);
 else
 baseFileData = imread(baseFileName);
